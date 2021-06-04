@@ -24,6 +24,5 @@ namespace ShopBridge.Core.DTO
         [Required]
         public int UnitId { get; set; }
 
-        public UnitDTO Unit { get; set; }
     }
 }

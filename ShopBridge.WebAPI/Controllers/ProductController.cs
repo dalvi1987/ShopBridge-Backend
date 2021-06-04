@@ -34,7 +34,7 @@ namespace ShopBridge.WebAPI.Controllers
                 {
                     return NotFound("Product data not found");
                 }
-                var productDtos = mapper.Map<IEnumerable<ProductDTO>>(products);
+                var productDtos = mapper.Map<IEnumerable<ProductWithDetailsDTO>>(products);
                 return Ok(productDtos);
             }
             catch (Exception)
@@ -58,7 +58,7 @@ namespace ShopBridge.WebAPI.Controllers
                 {
                     return NotFound($"Product with id {id} not found");
                 }
-                var productDto = mapper.Map<ProductDTO>(product);
+                var productDto = mapper.Map<ProductWithDetailsDTO>(product);
                 return Ok(productDto);
             }
             catch (Exception)
@@ -87,7 +87,7 @@ namespace ShopBridge.WebAPI.Controllers
                 await unitofWork.SaveAsync();
                 return CreatedAtAction("Get", new { id = createdProduct.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error creating product");
             }
@@ -112,7 +112,7 @@ namespace ShopBridge.WebAPI.Controllers
                 await unitofWork.SaveAsync();
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error deleting product");
             }
@@ -138,15 +138,15 @@ namespace ShopBridge.WebAPI.Controllers
                     return NotFound($"Product with id {id} not found");
                 }
                 
+                mapper.Map(productdto, productToUpdate);
                 productToUpdate.UpdatedBy = 100;
                 productToUpdate.UpdatedDate = DateTime.Now;
-                mapper.Map(productdto, productToUpdate);                
                 unitofWork.ProductRepository.Update(productToUpdate);
                 await unitofWork.SaveAsync();
                 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error updating product");
             }

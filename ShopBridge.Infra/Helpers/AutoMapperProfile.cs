@@ -10,7 +10,8 @@ namespace ShopBridge.Infra.Helpers
         {
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<Unit, UnitDTO>().ReverseMap();
-            
+            CreateMap<Product, ProductWithDetailsDTO>();
+
         }
     }
 }
