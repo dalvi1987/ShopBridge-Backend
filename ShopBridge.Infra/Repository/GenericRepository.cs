@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopBridge.Core;
 using ShopBridge.Infra.Interface;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ShopBridge.Infra.Repository
@@ -38,6 +42,18 @@ namespace ShopBridge.Infra.Repository
         public void Update(T obj)
         {
             appDbContext.Set<T>().Update(obj);
+        }
+
+        public virtual async Task<IEnumerable<T>> FindBy(Expression<Func<T, bool>> predicate)
+        {
+            var entitiylist = await appDbContext.Set<T>().Where(predicate).ToListAsync(); 
+            return entitiylist;
+        }
+
+        public virtual PaginatedList<T> GetAll(int pageIndex, int pageSize)
+        {
+            IQueryable<T> query = appDbContext.Set<T>().Paginate(pageIndex, pageSize);
+            return query.ToPaginatedList(pageIndex, pageSize, query.Count());
         }
     }
 }

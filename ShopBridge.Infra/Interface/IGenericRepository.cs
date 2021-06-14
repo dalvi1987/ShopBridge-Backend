@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ShopBridge.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ShopBridge.Infra.Interface
@@ -10,5 +13,7 @@ namespace ShopBridge.Infra.Interface
         public Task<IEnumerable<T>> GetAll();
         public Task<T> GetById(TKey Id);
         public Task Delete(TKey Id);
+        public Task<IEnumerable<T>> FindBy(Expression<Func<T, bool>> predicate);
+        public PaginatedList<T> GetAll(int pageIndex, int pageSize);
     }
 }

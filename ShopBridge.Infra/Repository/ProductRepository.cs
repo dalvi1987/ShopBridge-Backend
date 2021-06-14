@@ -27,5 +27,24 @@ namespace ShopBridge.Infra.Repository
             return products;
         }
 
+        public async Task<IEnumerable<Product>> FindBy(string productName)
+        {
+            var entitiylist = await base.FindBy(x => x.Name == productName);
+            return entitiylist;
+        }
+
+        public async Task<IEnumerable<Product>> FindByUnitStock(string productName)
+        {
+
+            var entitiylist = await base.FindBy(x => x.Name == productName);
+            return entitiylist;
+        }
+
+        public override PaginatedList<Product> GetAll(int pageIndex, int pageSize)
+        {
+            IQueryable<Product> query = appDbContext.Products.Include(y => y.Unit).Paginate(pageIndex, pageSize);
+            return query.ToPaginatedList(pageIndex, pageSize, query.Count());
+        }
+
     }
 }
